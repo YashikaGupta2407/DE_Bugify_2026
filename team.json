@@ -1,0 +1,30 @@
+{
+  "team_id": "T0007",
+  "team_name": "Bugify",
+  "members": [
+    {
+      "name": "Yashika Gupta",
+      "student_id": "2501010724",
+      "github": null,
+      "role": "Lead"
+    },
+    {
+      "name": "Aish Saqwal",
+      "student_id": "2501010038",
+      "github": null,
+      "role": "Member"
+    },
+    {
+      "name": "Akshara Verma",
+      "student_id": "2501010548",
+      "github": null,
+      "role": "Member"
+    },
+    {
+      "name": "Abhijeet Raj Singh",
+      "student_id": "2501010012",
+      "github": null,
+      "role": "Member"
+    }
+  ]
+}
