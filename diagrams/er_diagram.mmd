@@ -1,0 +1,70 @@
+erDiagram
+    PLANS ||--o{ ACCOUNTS : subscribes
+    ACCOUNTS ||--|{ PROFILES : contains
+    ACCOUNTS ||--o{ INVOICES : billed
+    PROFILES ||--o{ VIEWING_ACTIVITY : watches
+    TITLES ||--o{ VIEWING_ACTIVITY : viewed
+    TITLES o|--o{ EPISODES : contains
+    EPISODES o|--o{ VIEWING_ACTIVITY : episode
+    TITLES ||--o{ TITLE_GENRES : tagged
+    GENRES ||--o{ TITLE_GENRES : classifies
+    PROFILES ||--o{ RATINGS : submits
+    TITLES ||--o{ RATINGS : receives
+    PROFILES ||--o{ MY_LIST : saves
+    TITLES ||--o{ MY_LIST : appears_in
+
+    PLANS {
+        smallint plan_id PK
+        varchar plan_name UK
+        numeric monthly_price_inr
+    }
+    ACCOUNTS {
+        integer account_id PK
+        varchar email UK
+        smallint plan_id FK
+        varchar status
+    }
+    PROFILES {
+        integer profile_id PK
+        integer account_id FK
+        boolean is_kids
+    }
+    TITLES {
+        integer title_id PK
+        varchar title_type
+        varchar name
+        varchar maturity_rating
+    }
+    EPISODES {
+        integer episode_id PK
+        integer title_id FK
+        smallint season_no
+        smallint episode_no
+    }
+    GENRES {
+        smallint genre_id PK
+        varchar genre_name UK
+    }
+    TITLE_GENRES {
+        integer title_id PK, FK
+        smallint genre_id PK, FK
+    }
+    VIEWING_ACTIVITY {
+        bigint view_id PK
+        integer profile_id FK
+        integer title_id FK
+        integer episode_id FK
+    }
+    RATINGS {
+        integer profile_id PK, FK
+        integer title_id PK, FK
+    }
+    MY_LIST {
+        integer profile_id PK, FK
+        integer title_id PK, FK
+    }
+    INVOICES {
+        bigint invoice_id PK
+        integer account_id FK
+        date billing_period_start
+    }
