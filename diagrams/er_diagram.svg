@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1840" height="1120" viewBox="0 0 1840 1120">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033}.title{font-size:27px;font-weight:bold}.head{font-size:18px;font-weight:bold;fill:#fff}.attr{font-size:14px}.section{font-size:18px;font-weight:bold}</style>
+<text x="30" y="24" class="title">Netflix streaming database ER diagram</text>
+<rect x="30" y="30" width="410" height="142" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M38 30 H432 Q440 30 440 38 V70 H30 V38 Q30 30 38 30" fill="#334e68"/>
+<text x="44" y="57" class="head">plans</text>
+<text x="44" y="92" class="attr">PK plan_id</text>
+<text x="44" y="117" class="attr">UK plan_name</text>
+<text x="44" y="142" class="attr">monthly_price_inr · max_streams</text>
+<text x="44" y="167" class="attr">max_resolution · has_ads</text>
+<rect x="480" y="30" width="410" height="142" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M488 30 H882 Q890 30 890 38 V70 H480 V38 Q480 30 488 30" fill="#334e68"/>
+<text x="494" y="57" class="head">accounts</text>
+<text x="494" y="92" class="attr">PK account_id</text>
+<text x="494" y="117" class="attr">UK email · UK phone?</text>
+<text x="494" y="142" class="attr">FK plan_id · signup_date</text>
+<text x="494" y="167" class="attr">status · cancelled_on · next_billing_date</text>
+<rect x="930" y="30" width="410" height="142" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M938 30 H1332 Q1340 30 1340 38 V70 H930 V38 Q930 30 938 30" fill="#334e68"/>
+<text x="944" y="57" class="head">profiles</text>
+<text x="944" y="92" class="attr">PK profile_id</text>
+<text x="944" y="117" class="attr">FK account_id</text>
+<text x="944" y="142" class="attr">profile_name · is_kids · maturity_limit</text>
+<text x="944" y="167" class="attr">language · created_at</text>
+<rect x="1380" y="30" width="410" height="92" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M1388 30 H1782 Q1790 30 1790 38 V70 H1380 V38 Q1380 30 1388 30" fill="#334e68"/>
+<text x="1394" y="57" class="head">genres</text>
+<text x="1394" y="92" class="attr">PK genre_id</text>
+<text x="1394" y="117" class="attr">UK genre_name</text>
+<rect x="30" y="245" width="410" height="167" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M38 245 H432 Q440 245 440 253 V285 H30 V253 Q30 245 38 245" fill="#334e68"/>
+<text x="44" y="272" class="head">titles</text>
+<text x="44" y="307" class="attr">PK title_id</text>
+<text x="44" y="332" class="attr">title_type · name · release_year</text>
+<text x="44" y="357" class="attr">maturity_rating · original_language</text>
+<text x="44" y="382" class="attr">runtime_min · is_netflix_original</text>
+<text x="44" y="407" class="attr">added_on · leaving_on</text>
+<rect x="480" y="245" width="410" height="92" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M488 245 H882 Q890 245 890 253 V285 H480 V253 Q480 245 488 245" fill="#334e68"/>
+<text x="494" y="272" class="head">title_genres</text>
+<text x="494" y="307" class="attr">PK/FK title_id</text>
+<text x="494" y="332" class="attr">PK/FK genre_id</text>
+<rect x="930" y="245" width="410" height="142" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M938 245 H1332 Q1340 245 1340 253 V285 H930 V253 Q930 245 938 245" fill="#334e68"/>
+<text x="944" y="272" class="head">episodes</text>
+<text x="944" y="307" class="attr">PK episode_id</text>
+<text x="944" y="332" class="attr">FK title_id · season_no · episode_no</text>
+<text x="944" y="357" class="attr">episode_title · runtime_min · release_date</text>
+<text x="944" y="382" class="attr">UK title_id + season_no + episode_no</text>
+<rect x="1380" y="245" width="410" height="142" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M1388 245 H1782 Q1790 245 1790 253 V285 H1380 V253 Q1380 245 1388 245" fill="#334e68"/>
+<text x="1394" y="272" class="head">viewing_activity</text>
+<text x="1394" y="307" class="attr">PK view_id</text>
+<text x="1394" y="332" class="attr">FK profile_id · FK title_id</text>
+<text x="1394" y="357" class="attr">FK episode_id · started_at</text>
+<text x="1394" y="382" class="attr">duration_watched_sec · device_type · completed</text>
+<rect x="30" y="460" width="410" height="92" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M38 460 H432 Q440 460 440 468 V500 H30 V468 Q30 460 38 460" fill="#334e68"/>
+<text x="44" y="487" class="head">ratings</text>
+<text x="44" y="522" class="attr">PK/FK profile_id · PK/FK title_id</text>
+<text x="44" y="547" class="attr">rating · rated_at</text>
+<rect x="480" y="460" width="410" height="92" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M488 460 H882 Q890 460 890 468 V500 H480 V468 Q480 460 488 460" fill="#334e68"/>
+<text x="494" y="487" class="head">my_list</text>
+<text x="494" y="522" class="attr">PK/FK profile_id · PK/FK title_id</text>
+<text x="494" y="547" class="attr">added_at</text>
+<rect x="930" y="460" width="410" height="117" rx="8" fill="#fff" stroke="#667085" stroke-width="1.5"/>
+<path d="M938 460 H1332 Q1340 460 1340 468 V500 H930 V468 Q930 460 938 460" fill="#334e68"/>
+<text x="944" y="487" class="head">invoices</text>
+<text x="944" y="522" class="attr">PK invoice_id</text>
+<text x="944" y="547" class="attr">FK account_id · billing_period_start</text>
+<text x="944" y="572" class="attr">amount_inr · status · paid_at</text>
+<rect x="30" y="695" width="1780" height="390" rx="10" fill="#fff" stroke="#98a2b3"/>
+<text x="55" y="730" class="section">Relationships and cardinalities</text>
+<text x="55" y="770" class="attr">PLANS 1 — 0..N ACCOUNTS</text>
+<text x="55" y="820" class="attr">ACCOUNTS 1 — 1..5 PROFILES</text>
+<text x="55" y="870" class="attr">ACCOUNTS 1 — 0..N INVOICES</text>
+<text x="55" y="920" class="attr">TITLES 1 — 0..N EPISODES</text>
+<text x="55" y="970" class="attr">TITLES 1 — 0..N TITLE_GENRES — N..1 GENRES</text>
+<text x="905" y="770" class="attr">PROFILES 1 — 0..N VIEWING_ACTIVITY; TITLES 1 — 0..N VIEWING_ACTIVITY</text>
+<text x="905" y="820" class="attr">EPISODES 1 — 0..N VIEWING_ACTIVITY (viewing episode is optional)</text>
+<text x="905" y="870" class="attr">PROFILES 1 — 0..N RATINGS; TITLES 1 — 0..N RATINGS</text>
+<text x="905" y="920" class="attr">PROFILES 1 — 0..N MY_LIST; TITLES 1 — 0..N MY_LIST</text>
+</svg>
