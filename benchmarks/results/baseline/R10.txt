@@ -1,0 +1,27 @@
+=== R10 run 1 ===
+Seq Scan on accounts  (cost=0.00..683.00 rows=125 width=13) (actual time=0.174..3.044 rows=1.00 loops=1)
+  Filter: (lower((email)::text) = 'arjun.chopra1409@yahoo.com'::text)
+  Rows Removed by Filter: 24999
+  Buffers: shared hit=308
+Planning:
+  Buffers: shared hit=97
+Planning Time: 0.210 ms
+Execution Time: 3.062 ms
+=== R10 run 2 ===
+Seq Scan on accounts  (cost=0.00..683.00 rows=125 width=13) (actual time=0.162..2.956 rows=1.00 loops=1)
+  Filter: (lower((email)::text) = 'arjun.chopra1409@yahoo.com'::text)
+  Rows Removed by Filter: 24999
+  Buffers: shared hit=308
+Planning:
+  Buffers: shared hit=97
+Planning Time: 0.169 ms
+Execution Time: 2.970 ms
+=== R10 run 3 ===
+Seq Scan on accounts  (cost=0.00..683.00 rows=125 width=13) (actual time=0.166..2.924 rows=1.00 loops=1)
+  Filter: (lower((email)::text) = 'arjun.chopra1409@yahoo.com'::text)
+  Rows Removed by Filter: 24999
+  Buffers: shared hit=308
+Planning:
+  Buffers: shared hit=97
+Planning Time: 0.181 ms
+Execution Time: 2.944 ms

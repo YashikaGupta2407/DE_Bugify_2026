@@ -1,0 +1,57 @@
+=== R06 run 1 ===
+Sort  (cost=26.69..26.69 rows=2 width=43) (actual time=0.391..0.392 rows=6.00 loops=1)
+  Sort Key: m.added_at DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=22 read=2
+  ->  Nested Loop  (cost=0.57..26.68 rows=2 width=43) (actual time=0.366..0.383 rows=6.00 loops=1)
+        Buffers: shared hit=19 read=2
+        ->  Index Scan using my_list_pkey on my_list m  (cost=0.29..10.07 rows=2 width=12) (actual time=0.356..0.357 rows=6.00 loops=1)
+              Index Cond: (profile_id = 7393)
+              Index Searches: 1
+              Buffers: shared hit=1 read=2
+        ->  Index Scan using titles_pkey on titles t  (cost=0.28..8.30 rows=1 width=35) (actual time=0.004..0.004 rows=1.00 loops=6)
+              Index Cond: (title_id = m.title_id)
+              Index Searches: 6
+              Buffers: shared hit=18
+Planning:
+  Buffers: shared hit=213
+Planning Time: 0.353 ms
+Execution Time: 0.417 ms
+=== R06 run 2 ===
+Sort  (cost=26.69..26.69 rows=2 width=43) (actual time=0.034..0.034 rows=6.00 loops=1)
+  Sort Key: m.added_at DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=24
+  ->  Nested Loop  (cost=0.57..26.68 rows=2 width=43) (actual time=0.013..0.026 rows=6.00 loops=1)
+        Buffers: shared hit=21
+        ->  Index Scan using my_list_pkey on my_list m  (cost=0.29..10.07 rows=2 width=12) (actual time=0.004..0.005 rows=6.00 loops=1)
+              Index Cond: (profile_id = 7393)
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Index Scan using titles_pkey on titles t  (cost=0.28..8.30 rows=1 width=35) (actual time=0.003..0.003 rows=1.00 loops=6)
+              Index Cond: (title_id = m.title_id)
+              Index Searches: 6
+              Buffers: shared hit=18
+Planning:
+  Buffers: shared hit=213
+Planning Time: 0.267 ms
+Execution Time: 0.054 ms
+=== R06 run 3 ===
+Sort  (cost=26.69..26.69 rows=2 width=43) (actual time=0.032..0.032 rows=6.00 loops=1)
+  Sort Key: m.added_at DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=24
+  ->  Nested Loop  (cost=0.57..26.68 rows=2 width=43) (actual time=0.011..0.025 rows=6.00 loops=1)
+        Buffers: shared hit=21
+        ->  Index Scan using my_list_pkey on my_list m  (cost=0.29..10.07 rows=2 width=12) (actual time=0.005..0.005 rows=6.00 loops=1)
+              Index Cond: (profile_id = 7393)
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Index Scan using titles_pkey on titles t  (cost=0.28..8.30 rows=1 width=35) (actual time=0.003..0.003 rows=1.00 loops=6)
+              Index Cond: (title_id = m.title_id)
+              Index Searches: 6
+              Buffers: shared hit=18
+Planning:
+  Buffers: shared hit=213
+Planning Time: 0.264 ms
+Execution Time: 0.053 ms

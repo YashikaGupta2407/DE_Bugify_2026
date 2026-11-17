@@ -1,0 +1,48 @@
+=== R18 run 1 ===
+GroupAggregate  (cost=10262.22..12266.22 rows=66800 width=45) (actual time=22.853..27.096 rows=26.00 loops=1)
+  Group Key: (date_trunc('month'::text, started_at)), device_type
+  Buffers: shared hit=1742
+  ->  Sort  (cost=10262.22..10429.22 rows=66800 width=17) (actual time=22.739..23.957 rows=66546.00 loops=1)
+        Sort Key: (date_trunc('month'::text, started_at)), device_type
+        Sort Method: quicksort  Memory: 4000kB
+        Buffers: shared hit=1742
+        ->  Seq Scan on viewing_activity  (cost=0.00..4909.01 rows=66800 width=17) (actual time=7.731..17.627 rows=66546.00 loops=1)
+              Filter: ((started_at)::date >= '2026-01-01'::date)
+              Rows Removed by Filter: 133855
+              Buffers: shared hit=1736
+Planning:
+  Buffers: shared hit=115
+Planning Time: 0.184 ms
+Execution Time: 27.127 ms
+=== R18 run 2 ===
+GroupAggregate  (cost=10262.22..12266.22 rows=66800 width=45) (actual time=22.901..27.166 rows=26.00 loops=1)
+  Group Key: (date_trunc('month'::text, started_at)), device_type
+  Buffers: shared hit=1742
+  ->  Sort  (cost=10262.22..10429.22 rows=66800 width=17) (actual time=22.786..24.011 rows=66546.00 loops=1)
+        Sort Key: (date_trunc('month'::text, started_at)), device_type
+        Sort Method: quicksort  Memory: 4000kB
+        Buffers: shared hit=1742
+        ->  Seq Scan on viewing_activity  (cost=0.00..4909.01 rows=66800 width=17) (actual time=7.694..17.610 rows=66546.00 loops=1)
+              Filter: ((started_at)::date >= '2026-01-01'::date)
+              Rows Removed by Filter: 133855
+              Buffers: shared hit=1736
+Planning:
+  Buffers: shared hit=115
+Planning Time: 0.206 ms
+Execution Time: 27.201 ms
+=== R18 run 3 ===
+GroupAggregate  (cost=10262.22..12266.22 rows=66800 width=45) (actual time=22.712..27.008 rows=26.00 loops=1)
+  Group Key: (date_trunc('month'::text, started_at)), device_type
+  Buffers: shared hit=1742
+  ->  Sort  (cost=10262.22..10429.22 rows=66800 width=17) (actual time=22.592..23.856 rows=66546.00 loops=1)
+        Sort Key: (date_trunc('month'::text, started_at)), device_type
+        Sort Method: quicksort  Memory: 4000kB
+        Buffers: shared hit=1742
+        ->  Seq Scan on viewing_activity  (cost=0.00..4909.01 rows=66800 width=17) (actual time=7.609..17.389 rows=66546.00 loops=1)
+              Filter: ((started_at)::date >= '2026-01-01'::date)
+              Rows Removed by Filter: 133855
+              Buffers: shared hit=1736
+Planning:
+  Buffers: shared hit=115
+Planning Time: 0.171 ms
+Execution Time: 27.038 ms

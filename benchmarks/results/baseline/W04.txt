@@ -1,0 +1,60 @@
+=== W04 run 1 ===
+Insert on invoices  (cost=1.09..843.05 rows=0 width=0) (actual time=84.389..84.389 rows=0.00 loops=1)
+  Buffers: shared hit=123107 read=468 dirtied=747 written=218
+  ->  Hash Join  (cost=1.09..843.05 rows=21282 width=67) (actual time=0.016..3.801 rows=21282.00 loops=1)
+        Hash Cond: (a.plan_id = p.plan_id)
+        Buffers: shared hit=309
+        ->  Seq Scan on accounts a  (cost=0.00..620.50 rows=21282 width=6) (actual time=0.005..1.728 rows=21282.00 loops=1)
+              Filter: ((status)::text = 'ACTIVE'::text)
+              Rows Removed by Filter: 3718
+              Buffers: shared hit=308
+        ->  Hash  (cost=1.04..1.04 rows=4 width=7) (actual time=0.006..0.006 rows=4.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on plans p  (cost=0.00..1.04 rows=4 width=7) (actual time=0.002..0.002 rows=4.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=251
+Planning Time: 0.383 ms
+Trigger for constraint invoices_account_id_fkey: time=72.202 calls=21282
+Execution Time: 157.091 ms
+=== W04 run 2 ===
+Insert on invoices  (cost=1.09..843.05 rows=0 width=0) (actual time=43.686..43.687 rows=0.00 loops=1)
+  Buffers: shared hit=178501 dirtied=177 written=177
+  ->  Hash Join  (cost=1.09..843.05 rows=21282 width=67) (actual time=0.014..3.813 rows=21282.00 loops=1)
+        Hash Cond: (a.plan_id = p.plan_id)
+        Buffers: shared hit=309
+        ->  Seq Scan on accounts a  (cost=0.00..620.50 rows=21282 width=6) (actual time=0.005..1.729 rows=21282.00 loops=1)
+              Filter: ((status)::text = 'ACTIVE'::text)
+              Rows Removed by Filter: 3718
+              Buffers: shared hit=308
+        ->  Hash  (cost=1.04..1.04 rows=4 width=7) (actual time=0.005..0.005 rows=4.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on plans p  (cost=0.00..1.04 rows=4 width=7) (actual time=0.002..0.002 rows=4.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=251
+Planning Time: 0.352 ms
+Trigger for constraint invoices_account_id_fkey: time=50.931 calls=21282
+Execution Time: 95.123 ms
+=== W04 run 3 ===
+Insert on invoices  (cost=1.09..843.05 rows=0 width=0) (actual time=53.026..53.027 rows=0.00 loops=1)
+  Buffers: shared hit=172848 dirtied=177 written=177
+  ->  Hash Join  (cost=1.09..843.05 rows=21282 width=67) (actual time=0.013..3.885 rows=21282.00 loops=1)
+        Hash Cond: (a.plan_id = p.plan_id)
+        Buffers: shared hit=309
+        ->  Seq Scan on accounts a  (cost=0.00..620.50 rows=21282 width=6) (actual time=0.004..1.782 rows=21282.00 loops=1)
+              Filter: ((status)::text = 'ACTIVE'::text)
+              Rows Removed by Filter: 3718
+              Buffers: shared hit=308
+        ->  Hash  (cost=1.04..1.04 rows=4 width=7) (actual time=0.005..0.005 rows=4.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on plans p  (cost=0.00..1.04 rows=4 width=7) (actual time=0.002..0.002 rows=4.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=251
+Planning Time: 0.316 ms
+Trigger for constraint invoices_account_id_fkey: time=50.892 calls=21282
+Execution Time: 104.433 ms

@@ -1,0 +1,69 @@
+=== R11 run 1 ===
+Sort  (cost=3878.07..3879.85 rows=713 width=17) (actual time=7.589..7.615 rows=1373.00 loops=1)
+  Sort Key: i.account_id
+  Sort Method: quicksort  Memory: 102kB
+  Buffers: shared hit=1471
+  ->  Hash Join  (cost=3165.97..3844.28 rows=713 width=17) (actual time=5.175..7.519 rows=1373.00 loops=1)
+        Hash Cond: (a.account_id = i.account_id)
+        Buffers: shared hit=1468
+        ->  Seq Scan on accounts a  (cost=0.00..620.50 rows=22021 width=4) (actual time=0.007..1.571 rows=22021.00 loops=1)
+              Filter: ((status)::text = ANY ('{ACTIVE,ON_HOLD}'::text[]))
+              Rows Removed by Filter: 2979
+              Buffers: shared hit=308
+        ->  Hash  (cost=3155.86..3155.86 rows=809 width=17) (actual time=5.162..5.163 rows=1376.00 loops=1)
+              Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 82kB
+              Buffers: shared hit=1160
+              ->  Seq Scan on invoices i  (cost=0.00..3155.86 rows=809 width=17) (actual time=4.175..5.085 rows=1376.00 loops=1)
+                    Filter: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                    Rows Removed by Filter: 131681
+                    Buffers: shared hit=1160
+Planning:
+  Buffers: shared hit=263 read=10
+Planning Time: 1.943 ms
+Execution Time: 7.657 ms
+=== R11 run 2 ===
+Sort  (cost=3878.07..3879.85 rows=713 width=17) (actual time=7.527..7.555 rows=1373.00 loops=1)
+  Sort Key: i.account_id
+  Sort Method: quicksort  Memory: 102kB
+  Buffers: shared hit=1471
+  ->  Hash Join  (cost=3165.97..3844.28 rows=713 width=17) (actual time=5.104..7.453 rows=1373.00 loops=1)
+        Hash Cond: (a.account_id = i.account_id)
+        Buffers: shared hit=1468
+        ->  Seq Scan on accounts a  (cost=0.00..620.50 rows=22021 width=4) (actual time=0.005..1.573 rows=22021.00 loops=1)
+              Filter: ((status)::text = ANY ('{ACTIVE,ON_HOLD}'::text[]))
+              Rows Removed by Filter: 2979
+              Buffers: shared hit=308
+        ->  Hash  (cost=3155.86..3155.86 rows=809 width=17) (actual time=5.094..5.094 rows=1376.00 loops=1)
+              Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 82kB
+              Buffers: shared hit=1160
+              ->  Seq Scan on invoices i  (cost=0.00..3155.86 rows=809 width=17) (actual time=4.107..5.015 rows=1376.00 loops=1)
+                    Filter: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                    Rows Removed by Filter: 131681
+                    Buffers: shared hit=1160
+Planning:
+  Buffers: shared hit=273
+Planning Time: 0.409 ms
+Execution Time: 7.598 ms
+=== R11 run 3 ===
+Sort  (cost=3878.07..3879.85 rows=713 width=17) (actual time=7.328..7.352 rows=1373.00 loops=1)
+  Sort Key: i.account_id
+  Sort Method: quicksort  Memory: 102kB
+  Buffers: shared hit=1471
+  ->  Hash Join  (cost=3165.97..3844.28 rows=713 width=17) (actual time=4.939..7.262 rows=1373.00 loops=1)
+        Hash Cond: (a.account_id = i.account_id)
+        Buffers: shared hit=1468
+        ->  Seq Scan on accounts a  (cost=0.00..620.50 rows=22021 width=4) (actual time=0.005..1.558 rows=22021.00 loops=1)
+              Filter: ((status)::text = ANY ('{ACTIVE,ON_HOLD}'::text[]))
+              Rows Removed by Filter: 2979
+              Buffers: shared hit=308
+        ->  Hash  (cost=3155.86..3155.86 rows=809 width=17) (actual time=4.928..4.928 rows=1376.00 loops=1)
+              Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 82kB
+              Buffers: shared hit=1160
+              ->  Seq Scan on invoices i  (cost=0.00..3155.86 rows=809 width=17) (actual time=3.948..4.847 rows=1376.00 loops=1)
+                    Filter: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                    Rows Removed by Filter: 131681
+                    Buffers: shared hit=1160
+Planning:
+  Buffers: shared hit=273
+Planning Time: 0.411 ms
+Execution Time: 7.394 ms
