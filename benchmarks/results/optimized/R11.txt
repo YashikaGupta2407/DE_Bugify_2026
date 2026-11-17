@@ -1,0 +1,81 @@
+=== R11 run 1 ===
+Sort  (cost=1855.61..1857.39 rows=710 width=17) (actual time=7.086..7.147 rows=1373.00 loops=1)
+  Sort Key: i.account_id
+  Sort Method: quicksort  Memory: 102kB
+  Buffers: shared hit=518 read=10
+  ->  Hash Join  (cost=1120.67..1821.99 rows=710 width=17) (actual time=1.047..6.898 rows=1373.00 loops=1)
+        Hash Cond: (a.account_id = i.account_id)
+        Buffers: shared hit=515 read=10
+        ->  Seq Scan on accounts a  (cost=0.00..643.50 rows=22021 width=4) (actual time=0.007..4.118 rows=22021.00 loops=1)
+              Filter: ((status)::text = ANY ('{ACTIVE,ON_HOLD}'::text[]))
+              Rows Removed by Filter: 2979
+              Buffers: shared hit=331
+        ->  Hash  (cost=1110.59..1110.59 rows=806 width=17) (actual time=1.019..1.020 rows=1376.00 loops=1)
+              Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 82kB
+              Buffers: shared hit=184 read=10
+              ->  Bitmap Heap Scan on invoices i  (cost=28.68..1110.59 rows=806 width=17) (actual time=0.177..0.748 rows=1376.00 loops=1)
+                    Recheck Cond: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                    Heap Blocks: exact=184
+                    Buffers: shared hit=184 read=10
+                    ->  Bitmap Index Scan on invoices_status_period_idx  (cost=0.00..28.48 rows=806 width=0) (actual time=0.144..0.144 rows=1376.00 loops=1)
+                          Index Cond: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                          Index Searches: 1
+                          Buffers: shared read=10
+Planning:
+  Buffers: shared hit=342 read=1
+Planning Time: 1.044 ms
+Execution Time: 7.232 ms
+=== R11 run 2 ===
+Sort  (cost=1855.61..1857.39 rows=710 width=17) (actual time=6.245..6.307 rows=1373.00 loops=1)
+  Sort Key: i.account_id
+  Sort Method: quicksort  Memory: 102kB
+  Buffers: shared hit=528
+  ->  Hash Join  (cost=1120.67..1821.99 rows=710 width=17) (actual time=0.744..6.043 rows=1373.00 loops=1)
+        Hash Cond: (a.account_id = i.account_id)
+        Buffers: shared hit=525
+        ->  Seq Scan on accounts a  (cost=0.00..643.50 rows=22021 width=4) (actual time=0.008..3.526 rows=22021.00 loops=1)
+              Filter: ((status)::text = ANY ('{ACTIVE,ON_HOLD}'::text[]))
+              Rows Removed by Filter: 2979
+              Buffers: shared hit=331
+        ->  Hash  (cost=1110.59..1110.59 rows=806 width=17) (actual time=0.723..0.724 rows=1376.00 loops=1)
+              Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 82kB
+              Buffers: shared hit=194
+              ->  Bitmap Heap Scan on invoices i  (cost=28.68..1110.59 rows=806 width=17) (actual time=0.109..0.543 rows=1376.00 loops=1)
+                    Recheck Cond: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                    Heap Blocks: exact=184
+                    Buffers: shared hit=194
+                    ->  Bitmap Index Scan on invoices_status_period_idx  (cost=0.00..28.48 rows=806 width=0) (actual time=0.080..0.080 rows=1376.00 loops=1)
+                          Index Cond: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                          Index Searches: 1
+                          Buffers: shared hit=10
+Planning:
+  Buffers: shared hit=343
+Planning Time: 0.776 ms
+Execution Time: 6.394 ms
+=== R11 run 3 ===
+Sort  (cost=1855.61..1857.39 rows=710 width=17) (actual time=6.220..6.281 rows=1373.00 loops=1)
+  Sort Key: i.account_id
+  Sort Method: quicksort  Memory: 102kB
+  Buffers: shared hit=528
+  ->  Hash Join  (cost=1120.67..1821.99 rows=710 width=17) (actual time=0.829..6.017 rows=1373.00 loops=1)
+        Hash Cond: (a.account_id = i.account_id)
+        Buffers: shared hit=525
+        ->  Seq Scan on accounts a  (cost=0.00..643.50 rows=22021 width=4) (actual time=0.008..3.481 rows=22021.00 loops=1)
+              Filter: ((status)::text = ANY ('{ACTIVE,ON_HOLD}'::text[]))
+              Rows Removed by Filter: 2979
+              Buffers: shared hit=331
+        ->  Hash  (cost=1110.59..1110.59 rows=806 width=17) (actual time=0.803..0.803 rows=1376.00 loops=1)
+              Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 82kB
+              Buffers: shared hit=194
+              ->  Bitmap Heap Scan on invoices i  (cost=28.68..1110.59 rows=806 width=17) (actual time=0.120..0.600 rows=1376.00 loops=1)
+                    Recheck Cond: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                    Heap Blocks: exact=184
+                    Buffers: shared hit=194
+                    ->  Bitmap Index Scan on invoices_status_period_idx  (cost=0.00..28.48 rows=806 width=0) (actual time=0.091..0.091 rows=1376.00 loops=1)
+                          Index Cond: (((status)::text = 'FAILED'::text) AND (billing_period_start = '2026-06-01'::date))
+                          Index Searches: 1
+                          Buffers: shared hit=10
+Planning:
+  Buffers: shared hit=343
+Planning Time: 0.889 ms
+Execution Time: 6.366 ms
