@@ -1,0 +1,42 @@
+=== W01 run 1 ===
+Insert on viewing_activity  (cost=0.42..8.44 rows=0 width=0) (actual time=1.543..1.543 rows=0.00 loops=1)
+  Buffers: shared hit=140 read=20 dirtied=8
+  ->  Index Scan using episodes_title_id_season_no_episode_no_key on episodes  (cost=0.42..8.44 rows=1 width=71) (actual time=0.088..0.089 rows=1.00 loops=1)
+        Index Cond: ((title_id = 40002) AND (season_no = 1) AND (episode_no = 5))
+        Index Searches: 1
+        Buffers: shared hit=3 read=4
+Planning:
+  Buffers: shared hit=106 read=2
+Planning Time: 0.406 ms
+Trigger for constraint viewing_activity_profile_id_fkey: time=0.873 calls=1
+Trigger for constraint viewing_activity_title_id_fkey: time=0.567 calls=1
+Trigger for constraint viewing_activity_episode_id_fkey: time=0.139 calls=1
+Execution Time: 3.145 ms
+=== W01 run 2 ===
+Insert on viewing_activity  (cost=0.42..8.44 rows=0 width=0) (actual time=0.408..0.409 rows=0.00 loops=1)
+  Buffers: shared hit=161 dirtied=1
+  ->  Index Scan using episodes_title_id_season_no_episode_no_key on episodes  (cost=0.42..8.44 rows=1 width=71) (actual time=0.027..0.028 rows=1.00 loops=1)
+        Index Cond: ((title_id = 40002) AND (season_no = 1) AND (episode_no = 5))
+        Index Searches: 1
+        Buffers: shared hit=7
+Planning:
+  Buffers: shared hit=108
+Planning Time: 0.399 ms
+Trigger for constraint viewing_activity_profile_id_fkey: time=0.392 calls=1
+Trigger for constraint viewing_activity_title_id_fkey: time=0.373 calls=1
+Trigger for constraint viewing_activity_episode_id_fkey: time=0.084 calls=1
+Execution Time: 1.281 ms
+=== W01 run 3 ===
+Insert on viewing_activity  (cost=0.42..8.44 rows=0 width=0) (actual time=0.392..0.393 rows=0.00 loops=1)
+  Buffers: shared hit=161 dirtied=1
+  ->  Index Scan using episodes_title_id_season_no_episode_no_key on episodes  (cost=0.42..8.44 rows=1 width=71) (actual time=0.027..0.028 rows=1.00 loops=1)
+        Index Cond: ((title_id = 40002) AND (season_no = 1) AND (episode_no = 5))
+        Index Searches: 1
+        Buffers: shared hit=7
+Planning:
+  Buffers: shared hit=108
+Planning Time: 0.380 ms
+Trigger for constraint viewing_activity_profile_id_fkey: time=0.389 calls=1
+Trigger for constraint viewing_activity_title_id_fkey: time=0.362 calls=1
+Trigger for constraint viewing_activity_episode_id_fkey: time=0.082 calls=1
+Execution Time: 1.248 ms

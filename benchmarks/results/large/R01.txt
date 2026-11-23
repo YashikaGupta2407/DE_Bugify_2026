@@ -1,0 +1,66 @@
+=== R01 run 1 ===
+Unique  (cost=25.09..25.10 rows=2 width=48) (actual time=0.750..0.751 rows=1.00 loops=1)
+  Buffers: shared hit=8 read=5
+  ->  Sort  (cost=25.09..25.09 rows=2 width=48) (actual time=0.749..0.750 rows=1.00 loops=1)
+        Sort Key: v.title_id, v.started_at DESC
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=8 read=5
+        ->  Nested Loop  (cost=0.72..25.08 rows=2 width=48) (actual time=0.714..0.715 rows=1.00 loops=1)
+              Buffers: shared hit=2 read=5
+              ->  Index Only Scan using viewing_activity_profile_unfinished_idx on viewing_activity v  (cost=0.43..8.46 rows=2 width=20) (actual time=0.480..0.481 rows=1.00 loops=1)
+                    Index Cond: (profile_id = 7043)
+                    Heap Fetches: 0
+                    Index Searches: 1
+                    Buffers: shared hit=1 read=3
+              ->  Index Scan using titles_pkey on titles t  (cost=0.29..8.31 rows=1 width=32) (actual time=0.228..0.228 rows=1.00 loops=1)
+                    Index Cond: (title_id = v.title_id)
+                    Index Searches: 1
+                    Buffers: shared hit=1 read=2
+Planning:
+  Buffers: shared hit=335 read=12
+Planning Time: 7.261 ms
+Execution Time: 0.836 ms
+=== R01 run 2 ===
+Unique  (cost=25.09..25.10 rows=2 width=48) (actual time=0.038..0.038 rows=1.00 loops=1)
+  Buffers: shared hit=13
+  ->  Sort  (cost=25.09..25.09 rows=2 width=48) (actual time=0.037..0.038 rows=1.00 loops=1)
+        Sort Key: v.title_id, v.started_at DESC
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=13
+        ->  Nested Loop  (cost=0.72..25.08 rows=2 width=48) (actual time=0.019..0.020 rows=1.00 loops=1)
+              Buffers: shared hit=7
+              ->  Index Only Scan using viewing_activity_profile_unfinished_idx on viewing_activity v  (cost=0.43..8.46 rows=2 width=20) (actual time=0.008..0.008 rows=1.00 loops=1)
+                    Index Cond: (profile_id = 7043)
+                    Heap Fetches: 0
+                    Index Searches: 1
+                    Buffers: shared hit=4
+              ->  Index Scan using titles_pkey on titles t  (cost=0.29..8.31 rows=1 width=32) (actual time=0.009..0.009 rows=1.00 loops=1)
+                    Index Cond: (title_id = v.title_id)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=352
+Planning Time: 1.278 ms
+Execution Time: 0.126 ms
+=== R01 run 3 ===
+Unique  (cost=25.09..25.10 rows=2 width=48) (actual time=0.036..0.037 rows=1.00 loops=1)
+  Buffers: shared hit=13
+  ->  Sort  (cost=25.09..25.09 rows=2 width=48) (actual time=0.036..0.036 rows=1.00 loops=1)
+        Sort Key: v.title_id, v.started_at DESC
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=13
+        ->  Nested Loop  (cost=0.72..25.08 rows=2 width=48) (actual time=0.019..0.019 rows=1.00 loops=1)
+              Buffers: shared hit=7
+              ->  Index Only Scan using viewing_activity_profile_unfinished_idx on viewing_activity v  (cost=0.43..8.46 rows=2 width=20) (actual time=0.008..0.009 rows=1.00 loops=1)
+                    Index Cond: (profile_id = 7043)
+                    Heap Fetches: 0
+                    Index Searches: 1
+                    Buffers: shared hit=4
+              ->  Index Scan using titles_pkey on titles t  (cost=0.29..8.31 rows=1 width=32) (actual time=0.009..0.009 rows=1.00 loops=1)
+                    Index Cond: (title_id = v.title_id)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=352
+Planning Time: 1.196 ms
+Execution Time: 0.169 ms

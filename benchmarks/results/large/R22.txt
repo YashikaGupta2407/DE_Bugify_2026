@@ -1,0 +1,51 @@
+=== R22 run 1 ===
+Sort  (cost=835.20..837.19 rows=798 width=36) (actual time=1.637..1.669 rows=872.00 loops=1)
+  Sort Key: leaving_on
+  Sort Method: quicksort  Memory: 72kB
+  Buffers: shared hit=496 read=2
+  ->  Bitmap Heap Scan on titles  (cost=16.46..796.73 rows=798 width=36) (actual time=0.450..1.498 rows=872.00 loops=1)
+        Recheck Cond: ((leaving_on >= '2026-07-01'::date) AND (leaving_on <= '2026-07-31'::date))
+        Heap Blocks: exact=493
+        Buffers: shared hit=493 read=2
+        ->  Bitmap Index Scan on titles_leaving_idx  (cost=0.00..16.26 rows=798 width=0) (actual time=0.358..0.358 rows=872.00 loops=1)
+              Index Cond: ((leaving_on >= '2026-07-01'::date) AND (leaving_on <= '2026-07-31'::date))
+              Index Searches: 1
+              Buffers: shared read=2
+Planning:
+  Buffers: shared hit=165
+Planning Time: 0.806 ms
+Execution Time: 1.740 ms
+=== R22 run 2 ===
+Sort  (cost=835.20..837.19 rows=798 width=36) (actual time=1.345..1.379 rows=872.00 loops=1)
+  Sort Key: leaving_on
+  Sort Method: quicksort  Memory: 72kB
+  Buffers: shared hit=498
+  ->  Bitmap Heap Scan on titles  (cost=16.46..796.73 rows=798 width=36) (actual time=0.130..1.218 rows=872.00 loops=1)
+        Recheck Cond: ((leaving_on >= '2026-07-01'::date) AND (leaving_on <= '2026-07-31'::date))
+        Heap Blocks: exact=493
+        Buffers: shared hit=495
+        ->  Bitmap Index Scan on titles_leaving_idx  (cost=0.00..16.26 rows=798 width=0) (actual time=0.072..0.072 rows=872.00 loops=1)
+              Index Cond: ((leaving_on >= '2026-07-01'::date) AND (leaving_on <= '2026-07-31'::date))
+              Index Searches: 1
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=165
+Planning Time: 0.929 ms
+Execution Time: 1.450 ms
+=== R22 run 3 ===
+Sort  (cost=835.20..837.19 rows=798 width=36) (actual time=1.345..1.380 rows=872.00 loops=1)
+  Sort Key: leaving_on
+  Sort Method: quicksort  Memory: 72kB
+  Buffers: shared hit=498
+  ->  Bitmap Heap Scan on titles  (cost=16.46..796.73 rows=798 width=36) (actual time=0.130..1.218 rows=872.00 loops=1)
+        Recheck Cond: ((leaving_on >= '2026-07-01'::date) AND (leaving_on <= '2026-07-31'::date))
+        Heap Blocks: exact=493
+        Buffers: shared hit=495
+        ->  Bitmap Index Scan on titles_leaving_idx  (cost=0.00..16.26 rows=798 width=0) (actual time=0.073..0.073 rows=872.00 loops=1)
+              Index Cond: ((leaving_on >= '2026-07-01'::date) AND (leaving_on <= '2026-07-31'::date))
+              Index Searches: 1
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=165
+Planning Time: 0.935 ms
+Execution Time: 1.453 ms

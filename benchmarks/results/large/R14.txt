@@ -1,0 +1,126 @@
+=== R14 run 1 ===
+Gather Merge  (cost=80808.94..102146.29 rows=183206 width=22) (actual time=364.068..380.709 rows=138665.00 loops=1)
+  Workers Planned: 2
+  Workers Launched: 2
+  Buffers: shared hit=1789 read=47041 written=1
+  ->  Sort  (cost=79808.91..79999.75 rows=76336 width=22) (actual time=361.028..362.780 rows=46221.67 loops=3)
+        Sort Key: v.started_at DESC
+        Sort Method: quicksort  Memory: 3385kB
+        Buffers: shared hit=1789 read=47041 written=1
+        Worker 0:  Sort Method: quicksort  Memory: 3333kB
+        Worker 1:  Sort Method: quicksort  Memory: 3323kB
+        ->  Hash Join  (cost=17915.75..73618.03 rows=76336 width=22) (actual time=60.398..353.018 rows=46221.67 loops=3)
+              Hash Cond: (v.title_id = t.title_id)
+              Join Filter: (array_position('{U,UA7,UA13,UA16,A}'::text[], (t.maturity_rating)::text) > array_position('{U,UA7,UA13,UA16,A}'::text[], (p.maturity_limit)::text))
+              Rows Removed by Join Filter: 132339
+              Buffers: shared hit=1773 read=47041 written=1
+              ->  Parallel Hash Join  (cost=15829.75..70930.87 rows=229009 width=19) (actual time=48.948..267.017 rows=178561.00 loops=3)
+                    Hash Cond: (v.profile_id = p.profile_id)
+                    Buffers: shared read=46305 written=1
+                    ->  Parallel Seq Scan on viewing_activity v  (cost=0.00..50712.08 rows=1672008 width=16) (actual time=0.113..59.715 rows=1337606.33 loops=3)
+                          Buffers: shared read=33992
+                    ->  Parallel Hash  (cost=14759.70..14759.70 rows=85604 width=7) (actual time=48.676..48.677 rows=66667.00 loops=3)
+                          Buckets: 262144  Batches: 1  Memory Usage: 9952kB
+                          Buffers: shared read=12313 written=1
+                          ->  Parallel Bitmap Heap Scan on profiles p  (cost=1735.66..14759.70 rows=85604 width=7) (actual time=8.291..36.266 rows=66667.00 loops=3)
+                                Recheck Cond: is_kids
+                                Heap Blocks: exact=4225
+                                Buffers: shared read=12313 written=1
+                                Worker 0:  Heap Blocks: exact=3973
+                                Worker 1:  Heap Blocks: exact=3945
+                                ->  Bitmap Index Scan on profiles_kids_idx  (cost=0.00..1684.30 rows=205450 width=0) (actual time=8.665..8.665 rows=200001.00 loops=1)
+                                      Index Searches: 1
+                                      Buffers: shared read=170
+              ->  Hash  (cost=1336.00..1336.00 rows=60000 width=7) (actual time=11.174..11.175 rows=60000.00 loops=3)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2833kB
+                    Buffers: shared hit=1472 read=736
+                    ->  Seq Scan on titles t  (cost=0.00..1336.00 rows=60000 width=7) (actual time=0.060..5.292 rows=60000.00 loops=3)
+                          Buffers: shared hit=1472 read=736
+Planning:
+  Buffers: shared hit=464 read=30 dirtied=1
+Planning Time: 3.663 ms
+Execution Time: 385.636 ms
+=== R14 run 2 ===
+Gather Merge  (cost=80808.94..102146.29 rows=183206 width=22) (actual time=344.282..361.375 rows=138665.00 loops=1)
+  Workers Planned: 2
+  Workers Launched: 2
+  Buffers: shared hit=6024 read=42806
+  ->  Sort  (cost=79808.91..79999.75 rows=76336 width=22) (actual time=341.681..343.347 rows=46221.67 loops=3)
+        Sort Key: v.started_at DESC
+        Sort Method: quicksort  Memory: 3366kB
+        Buffers: shared hit=6024 read=42806
+        Worker 0:  Sort Method: quicksort  Memory: 3314kB
+        Worker 1:  Sort Method: quicksort  Memory: 3362kB
+        ->  Hash Join  (cost=17915.75..73618.03 rows=76336 width=22) (actual time=43.180..333.022 rows=46221.67 loops=3)
+              Hash Cond: (v.title_id = t.title_id)
+              Join Filter: (array_position('{U,UA7,UA13,UA16,A}'::text[], (t.maturity_rating)::text) > array_position('{U,UA7,UA13,UA16,A}'::text[], (p.maturity_limit)::text))
+              Rows Removed by Join Filter: 132339
+              Buffers: shared hit=6008 read=42806
+              ->  Parallel Hash Join  (cost=15829.75..70930.87 rows=229009 width=19) (actual time=32.416..249.503 rows=178561.00 loops=3)
+                    Hash Cond: (v.profile_id = p.profile_id)
+                    Buffers: shared hit=3499 read=42806
+                    ->  Parallel Seq Scan on viewing_activity v  (cost=0.00..50712.08 rows=1672008 width=16) (actual time=0.110..60.349 rows=1337606.33 loops=3)
+                          Buffers: shared hit=282 read=33710
+                    ->  Parallel Hash  (cost=14759.70..14759.70 rows=85604 width=7) (actual time=32.164..32.165 rows=66667.00 loops=3)
+                          Buckets: 262144  Batches: 1  Memory Usage: 9920kB
+                          Buffers: shared hit=3217 read=9096
+                          ->  Parallel Bitmap Heap Scan on profiles p  (cost=1735.66..14759.70 rows=85604 width=7) (actual time=4.821..22.129 rows=66667.00 loops=3)
+                                Recheck Cond: is_kids
+                                Heap Blocks: exact=4050
+                                Buffers: shared hit=3217 read=9096
+                                Worker 0:  Heap Blocks: exact=4075
+                                Worker 1:  Heap Blocks: exact=4018
+                                ->  Bitmap Index Scan on profiles_kids_idx  (cost=0.00..1684.30 rows=205450 width=0) (actual time=4.953..4.953 rows=200001.00 loops=1)
+                                      Index Searches: 1
+                                      Buffers: shared read=170
+              ->  Hash  (cost=1336.00..1336.00 rows=60000 width=7) (actual time=10.488..10.489 rows=60000.00 loops=3)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2833kB
+                    Buffers: shared hit=2208
+                    ->  Seq Scan on titles t  (cost=0.00..1336.00 rows=60000 width=7) (actual time=0.033..4.982 rows=60000.00 loops=3)
+                          Buffers: shared hit=2208
+Planning:
+  Buffers: shared hit=471 read=23
+Planning Time: 1.874 ms
+Execution Time: 366.320 ms
+=== R14 run 3 ===
+Gather Merge  (cost=80808.94..102146.29 rows=183206 width=22) (actual time=331.552..346.860 rows=138665.00 loops=1)
+  Workers Planned: 2
+  Workers Launched: 2
+  Buffers: shared hit=15402 read=33428
+  ->  Sort  (cost=79808.91..79999.75 rows=76336 width=22) (actual time=328.882..330.552 rows=46221.67 loops=3)
+        Sort Key: v.started_at DESC
+        Sort Method: quicksort  Memory: 3360kB
+        Buffers: shared hit=15402 read=33428
+        Worker 0:  Sort Method: quicksort  Memory: 3314kB
+        Worker 1:  Sort Method: quicksort  Memory: 3368kB
+        ->  Hash Join  (cost=17915.75..73618.03 rows=76336 width=22) (actual time=37.957..320.817 rows=46221.67 loops=3)
+              Hash Cond: (v.title_id = t.title_id)
+              Join Filter: (array_position('{U,UA7,UA13,UA16,A}'::text[], (t.maturity_rating)::text) > array_position('{U,UA7,UA13,UA16,A}'::text[], (p.maturity_limit)::text))
+              Rows Removed by Join Filter: 132339
+              Buffers: shared hit=15386 read=33428
+              ->  Parallel Hash Join  (cost=15829.75..70930.87 rows=229009 width=19) (actual time=27.029..238.937 rows=178561.00 loops=3)
+                    Hash Cond: (v.profile_id = p.profile_id)
+                    Buffers: shared hit=12877 read=33428
+                    ->  Parallel Seq Scan on viewing_activity v  (cost=0.00..50712.08 rows=1672008 width=16) (actual time=0.096..59.352 rows=1337606.33 loops=3)
+                          Buffers: shared hit=564 read=33428
+                    ->  Parallel Hash  (cost=14759.70..14759.70 rows=85604 width=7) (actual time=26.799..26.799 rows=66667.00 loops=3)
+                          Buckets: 262144  Batches: 1  Memory Usage: 9920kB
+                          Buffers: shared hit=12313
+                          ->  Parallel Bitmap Heap Scan on profiles p  (cost=1735.66..14759.70 rows=85604 width=7) (actual time=4.105..19.072 rows=66667.00 loops=3)
+                                Recheck Cond: is_kids
+                                Heap Blocks: exact=4197
+                                Buffers: shared hit=12313
+                                Worker 0:  Heap Blocks: exact=3968
+                                Worker 1:  Heap Blocks: exact=3978
+                                ->  Bitmap Index Scan on profiles_kids_idx  (cost=0.00..1684.30 rows=205450 width=0) (actual time=4.475..4.475 rows=200001.00 loops=1)
+                                      Index Searches: 1
+                                      Buffers: shared hit=170
+              ->  Hash  (cost=1336.00..1336.00 rows=60000 width=7) (actual time=10.714..10.715 rows=60000.00 loops=3)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2833kB
+                    Buffers: shared hit=2208
+                    ->  Seq Scan on titles t  (cost=0.00..1336.00 rows=60000 width=7) (actual time=0.029..4.916 rows=60000.00 loops=3)
+                          Buffers: shared hit=2208
+Planning:
+  Buffers: shared hit=494
+Planning Time: 1.419 ms
+Execution Time: 351.775 ms

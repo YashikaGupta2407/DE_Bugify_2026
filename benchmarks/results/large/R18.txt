@@ -1,0 +1,48 @@
+=== R18 run 1 ===
+GroupAggregate  (cost=210738.76..249878.14 rows=1304646 width=45) (actual time=781.312..950.600 rows=28.00 loops=1)
+  Group Key: (date_trunc('month'::text, started_at)), device_type
+  Buffers: shared hit=744646 read=14047, temp read=9185 written=9205
+  ->  Sort  (cost=210738.76..214000.38 rows=1304646 width=17) (actual time=777.261..855.038 rows=1326799.00 loops=1)
+        Sort Key: (date_trunc('month'::text, started_at)), device_type
+        Sort Method: external merge  Disk: 36752kB
+        Buffers: shared hit=744646 read=14047, temp read=9185 written=9205
+        ->  Index Scan using viewing_activity_started_idx on viewing_activity  (cost=0.43..51460.36 rows=1304646 width=17) (actual time=0.035..420.390 rows=1326799.00 loops=1)
+              Index Cond: (started_at >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+              Index Searches: 1
+              Buffers: shared hit=744640 read=14047
+Planning:
+  Buffers: shared hit=245
+Planning Time: 0.707 ms
+Execution Time: 958.980 ms
+=== R18 run 2 ===
+GroupAggregate  (cost=210738.76..249878.14 rows=1304646 width=45) (actual time=768.618..942.732 rows=28.00 loops=1)
+  Group Key: (date_trunc('month'::text, started_at)), device_type
+  Buffers: shared hit=758693, temp read=9185 written=9205
+  ->  Sort  (cost=210738.76..214000.38 rows=1304646 width=17) (actual time=764.568..844.984 rows=1326799.00 loops=1)
+        Sort Key: (date_trunc('month'::text, started_at)), device_type
+        Sort Method: external merge  Disk: 36752kB
+        Buffers: shared hit=758693, temp read=9185 written=9205
+        ->  Index Scan using viewing_activity_started_idx on viewing_activity  (cost=0.43..51460.36 rows=1304646 width=17) (actual time=0.023..392.658 rows=1326799.00 loops=1)
+              Index Cond: (started_at >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+              Index Searches: 1
+              Buffers: shared hit=758687
+Planning:
+  Buffers: shared hit=245
+Planning Time: 0.680 ms
+Execution Time: 951.295 ms
+=== R18 run 3 ===
+GroupAggregate  (cost=210738.76..249878.14 rows=1304646 width=45) (actual time=774.155..979.682 rows=28.00 loops=1)
+  Group Key: (date_trunc('month'::text, started_at)), device_type
+  Buffers: shared hit=758693, temp read=9185 written=9205
+  ->  Sort  (cost=210738.76..214000.38 rows=1304646 width=17) (actual time=770.093..861.616 rows=1326799.00 loops=1)
+        Sort Key: (date_trunc('month'::text, started_at)), device_type
+        Sort Method: external merge  Disk: 36752kB
+        Buffers: shared hit=758693, temp read=9185 written=9205
+        ->  Index Scan using viewing_activity_started_idx on viewing_activity  (cost=0.43..51460.36 rows=1304646 width=17) (actual time=0.023..395.939 rows=1326799.00 loops=1)
+              Index Cond: (started_at >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+              Index Searches: 1
+              Buffers: shared hit=758687
+Planning:
+  Buffers: shared hit=245
+Planning Time: 0.771 ms
+Execution Time: 985.799 ms

@@ -4,7 +4,7 @@
 
 This report records the large-dataset facts that can be established from the supplied `large_data.zip`, describes the scale-out design, and provides the comparison table for the large-data benchmark.
 
-**Benchmark status:** `benchmarks/results/large/summary.csv` is being produced by a teammate. Large-data execution times, growth factors, target verdicts, execution plans, and PostgreSQL storage measurements are intentionally left as pending until that measured output is available. No large-data timings or database sizes are invented in this report.
+**Benchmark status:** the optimized workload was run three times per query on PostgreSQL 18.6 against the loaded `netflix_large` database. The summary and all 30 raw three-run plan files are in `benchmarks/results/large/`. Large-data timings below are measured execution times; write queries were rolled back after each run. The benchmark used the CP3 indexes on the original `viewing_activity` table. The separate partitioned copy was validated independently.
 
 The CP4 instructions require the optimized workload (not the original baseline workload), three runs per query, writes inside a transaction that is rolled back, and the same query IDs so results can be compared with CP3.
 
@@ -48,47 +48,45 @@ A substantial number of viewing rows have `episode_id IS NULL`. This is valid: m
 
 ### 2.4 Large-data workload compatibility
 
-Some workload statements contain fixed seed-data identifiers. In the large CSV, `title_id = 2909` and `title_id = 2523` are movies, not series, and have no episodes. Therefore the unchanged seed-specific R02, R07, R13, and W01 statements do not exercise the intended series/episode path on this dataset.
-
-For a meaningful large-data benchmark, retain the same query IDs and query intent, but use a documented large-data fixture identifier. The inspected large dataset contains series `title_id = 40002` with 25 episodes, including season 1 episode 5; one episode has no viewing row. W01 must also use a view ID that does not already exist. The teammate preparing the large summary should record any fixture-only ID substitutions alongside the raw plans. Do not silently compare an empty/no-op query with a seed query that exercised real rows.
+Some workload statements contain fixed seed-data identifiers. In the large CSV, `title_id = 2909` and `title_id = 2523` are movies, not series, and have no episodes. Therefore the large benchmark used `title_id = 40002` for R02, R07, R13, R25, W01, and W02 while retaining their query IDs and intent. This is a series with 25 episodes, including season 1 episode 5; one episode has no viewing row. W01 used `view_id = 990000001`, verified absent before the benchmark. Profile IDs 7043 and 7393 exist in the large data. The exact fixture-substituted optimized workload is saved as `benchmarks/results/large/workload.sql` beside its three-run plans. Other query SQL was taken from `sql/06_optimized_queries.sql` without changes. The seed-specific IDs in `queries/workload_30.sql` and `sql/06_optimized_queries.sql` were not changed.
 
 ## 3. CP3 optimized timings used as the seed comparison
 
-The values below are the committed CP3 optimized averages in milliseconds. The large-data column must be filled from the teammate's measured `benchmarks/results/large/summary.csv`.
+The values below compare committed CP3 optimized averages with the measured large-data averages in `benchmarks/results/large/summary.csv`.
 
 | Query | Type | Optimized seed (ms) | Large (ms) | Growth | Target |
 |---|---|---:|---:|---:|---|
-| R01 | READ | 0.157 | Pending | Pending | <5 ms |
-| R02 | READ | 0.098 | Pending | Pending | <5 ms |
-| R03 | READ | 1.460 | Pending | Pending | <250 ms |
-| R04 | READ | 0.969 | Pending | Pending | <250 ms |
-| R05 | READ | 0.490 | Pending | Pending | <250 ms |
-| R06 | READ | 0.229 | Pending | Pending | <5 ms |
-| R07 | READ | 0.094 | Pending | Pending | <5 ms |
-| R08 | READ | 5.703 | Pending | Pending | <5,000 ms |
-| R09 | READ | 32.044 | Pending | Pending | <5,000 ms |
-| R10 | READ | 0.081 | Pending | Pending | <5 ms |
-| R11 | READ | 6.664 | Pending | Pending | <250 ms |
-| R12 | READ | 1.766 | Pending | Pending | <5,000 ms |
-| R13 | READ | 0.151 | Pending | Pending | <250 ms |
-| R14 | READ | 50.713 | Pending | Pending | <5,000 ms |
-| R15 | READ | 9.783 | Pending | Pending | <5,000 ms |
-| R16 | READ | 321.487 | Pending | Pending | <5,000 ms |
-| R17 | READ | 12.412 | Pending | Pending | <5,000 ms |
-| R18 | READ | 40.838 | Pending | Pending | <5,000 ms |
-| R19 | READ | 10.408 | Pending | Pending | <5,000 ms |
-| R20 | READ | 2.778 | Pending | Pending | <5,000 ms |
-| R21 | READ | 0.720 | Pending | Pending | <250 ms |
-| R22 | READ | 0.259 | Pending | Pending | <250 ms |
-| R23 | READ | 31.886 | Pending | Pending | <250 ms |
-| R24 | READ | 0.087 | Pending | Pending | <5 ms |
-| R25 | READ | 1.039 | Pending | Pending | <250 ms |
-| W01 | WRITE | 1.506 | Pending | Pending | <5 ms |
-| W02 | WRITE | 1.475 | Pending | Pending | <5 ms |
-| W03 | WRITE | 0.846 | Pending | Pending | <5 ms |
-| W04 | WRITE | 197.795 | Pending | Pending | <2,000 ms |
-| W05 | WRITE | 26.353 | Pending | Pending | <2,000 ms |
-| **Total** | | **760.291** | **Pending** | **Pending** | — |
+| R01 | READ | 0.157 | 0.377 | 2.401× | < 5 ms met |
+| R02 | READ | 0.098 | 0.102 | 1.041× | < 5 ms met |
+| R03 | READ | 1.460 | 22.289 | 15.266× | < 250 ms met |
+| R04 | READ | 0.969 | 9.896 | 10.213× | < 250 ms met |
+| R05 | READ | 0.490 | 5.210 | 10.633× | < 250 ms met |
+| R06 | READ | 0.229 | 0.218 | 0.952× | < 5 ms met |
+| R07 | READ | 0.094 | 0.043 | 0.457× | < 5 ms met |
+| R08 | READ | 5.703 | 92.061 | 16.143× | < 5,000 ms met |
+| R09 | READ | 32.044 | 414.878 | 12.947× | < 5,000 ms met |
+| R10 | READ | 0.081 | 0.224 | 2.765× | < 5 ms met |
+| R11 | READ | 6.664 | 64.459 | 9.673× | < 250 ms met |
+| R12 | READ | 1.766 | 28.107 | 15.916× | < 5,000 ms met |
+| R13 | READ | 0.151 | 0.340 | 2.252× | < 250 ms met |
+| R14 | READ | 50.713 | 367.910 | 7.255× | < 5,000 ms met |
+| R15 | READ | 9.783 | 59.946 | 6.128× | < 5,000 ms met |
+| R16 | READ | 321.487 | 3062.078 | 9.525× | < 5,000 ms met |
+| R17 | READ | 12.412 | 90.042 | 7.254× | < 5,000 ms met |
+| R18 | READ | 40.838 | 965.358 | 23.639× | < 5,000 ms met |
+| R19 | READ | 10.408 | 237.936 | 22.861× | < 5,000 ms met |
+| R20 | READ | 2.778 | 56.017 | 20.165× | < 5,000 ms met |
+| R21 | READ | 0.720 | 20.605 | 28.618× | < 250 ms met |
+| R22 | READ | 0.259 | 1.548 | 5.977× | < 250 ms met |
+| R23 | READ | 31.886 | 36.767 | 1.153× | < 250 ms met |
+| R24 | READ | 0.087 | 0.129 | 1.483× | < 5 ms met |
+| R25 | READ | 1.039 | 4.112 | 3.958× | < 250 ms met |
+| W01 | WRITE | 1.506 | 1.891 | 1.256× | < 5 ms met |
+| W02 | WRITE | 1.475 | 2.497 | 1.693× | < 5 ms met |
+| W03 | WRITE | 0.846 | 1.497 | 1.770× | < 5 ms met |
+| W04 | WRITE | 197.795 | 5655.539 | 28.593× | < 2,000 ms missed |
+| W05 | WRITE | 26.353 | 1105.907 | 41.965× | < 2,000 ms met |
+| **Total** | | **760.291** | **12307.983** | **16.189×** | — |
 
 The target groups follow the CP4 brief:
 - Real-time/member-facing: R01, R02, R06, R07, R10, R24, W01, W02, W03 — under 5 ms.
@@ -96,39 +94,39 @@ The target groups follow the CP4 brief:
 - Reports/analytics: R08, R09, R12, R14, R15, R16, R17, R18, R19, R20 — under 5,000 ms.
 - Batch jobs: W04 and W05 — under 2,000 ms.
 
-**How to complete this table:** copy the `avg_ms` value for each query ID from the teammate's large summary. Calculate `Growth = large avg_ms / optimized seed avg_ms`. Mark the target as met only after checking the relevant threshold. If a query uses a fixture-only ID substitution, retain the query ID and record the substitution in §2.4 and with the benchmark artifacts.
+**Growth** is large average divided by the committed CP3 optimized average. Target results use the CP4 thresholds shown above. W04 misses its target; its raw plan is available in `benchmarks/results/large/W04.txt`.
 
 ## 4. Growth analysis
 
-The table above establishes the input growth, but query-time growth cannot be classified until the large benchmark is measured. The following are hypotheses to test against the actual plans, not claims about measured large-data performance.
+The table above compares measured average execution time on the seed and large datasets. Absolute times remain within target for all listed groups except W04.
 
-| Query pattern | Likely scale behavior | Reason to verify |
+| Query pattern | Observed scale behavior | Plan evidence |
 |---|---|---|
-| Point lookups and profile-scoped rows (R01, R02, R06, R07, R10, R24) | Near-flat or logarithmic growth | Selective B-tree lookups should visit a small number of index and heap pages. |
-| Date-filtered top rows and operational lookups (R03, R11, R21, R22) | Depends on selectivity and partition/index pruning | A date window can remain selective, but a broad range may touch many pages. |
-| Whole-history aggregates (R09, R14, R16, R18) | May grow with the rows scanned | These queries aggregate a substantial share of viewing activity; an index cannot eliminate the need to read qualifying rows. |
-| Originals and anti-join reports (R13, R19) | Depends on join/index selectivity | The episode anti-join and per-title counts must use the relevant indexes; inspect actual loops and buffers. |
-| Deep pagination (R23) | May grow more than linearly in user-visible cost | OFFSET must walk past earlier rows. A stable index helps, but keyset pagination is the long-term design. |
-| Bulk writes (W04, W05) | Grows with inserted/updated rows and index/FK maintenance | More accounts and invoices increase row work, index maintenance, and foreign-key checks. |
+| Point lookups and profile-scoped rows (R01, R02, R06, R07, R10, R24) | Remained below 0.4 ms despite 20× table growth | Plans use selective B-tree lookups, with an email bitmap lookup for R10. |
+| Date-filtered and operational queries (R03, R11, R21, R22) | Increased 6×–29× but remained below 65 ms | R03 uses the time index; R11 scans accounts and filters invoices; R21 uses the status/date index; R22 uses the leaving-date index. |
+| Whole-history aggregates (R09, R14, R16, R18) | Increased about 7×–24×; all remained below 1,000 ms except R16 at 3,062 ms | R16 scans all views and spills sort data to temporary files; R18 uses the time index; R09 and R14 process broad view sets. |
+| Originals and anti-join reports (R13, R19) | R13 remained sub-ms; R19 increased about 23× to 238 ms | R13 uses episode and viewing indexes; R19 scans titles and probes the title/time index. |
+| Deep pagination (R23) | Increased about 1.15× to 36.8 ms | The ordering index avoids a full sort while walking past the offset. |
+| Bulk writes (W04, W05) | W04 increased about 28.6× and missed target; W05 increased about 42× but met target | W04 inserted 424,960 rows and dirtied over 16,000 buffers; W05 scans accounts and probes invoices. |
 
-After the benchmark arrives, replace these hypotheses with measured classifications: approximately unchanged, approximately proportional to scanned data, or worse than proportional. Include the plan evidence for any query that misses its target.
+The measured large averages show approximately flat sub-millisecond point lookups for R01, R02, R06, R07, and R24, while scans and aggregations rose with the larger tables. R16 increased about 9.5× and is the slowest read at 3,062 ms, within its 5,000 ms analytics target. W04 takes 5,656 ms to generate invoices for active accounts and is the only query that misses its target. W05 takes 1,106 ms, within its 2,000 ms batch target. R16’s plan scans viewing activity, profiles, accounts, and plans; W04 scans accounts and plans; W05 scans accounts and probes invoices. See the raw plan files for actual row counts, buffers, and timing details.
 
 ## 5. What is likely to become the bottleneck
 
-CP3 already identified several scan-heavy queries on the seed dataset:
+The large-data plans confirm several scan-heavy workloads:
 
-- **R16** groups viewing rows by account and hour and counts distinct profiles. It is a broad aggregation, so its large-data plan and memory/sort behavior need attention.
+- **R16** groups viewing rows by account and hour and counts distinct profiles. Its 3,062 ms plan sorts 4,012,819 views and spills sort data to disk, though it remains below the 5,000 ms target.
 - **R14** checks viewing activity against kids-profile maturity limits. It must read the qualifying viewing rows and join profiles/titles.
 - **R18 and R09** aggregate viewing history by month/device or genre. Their cost depends on the volume of qualifying history.
 - **R23** uses deep OFFSET pagination. The current CP3 index supports ordering, but OFFSET still has to skip the earlier rows.
-- **W04** inserts one invoice per active account. Its cost includes invoice index maintenance and a foreign-key check for each inserted row.
+- **W04** inserts one invoice per active account. It inserts 424,960 rows, takes 5,656 ms, and misses the 2,000 ms target; its cost includes invoice index maintenance and a foreign-key check for every row.
 - **R19** is much better after CP3's title/time index, but the large dataset has 20× as many viewing rows and 20× as many titles. Confirm that the large plan continues to use the index rather than assuming the seed plan remains optimal.
 
-No large-data fix is claimed here until the teammate's plan and timing evidence show a target miss. The first response to a miss should be to inspect the actual plan, row estimates, buffer reads, sort method, and loops—not to add indexes speculatively.
+The measured target misses are documented above. Their current plans indicate broad table work; future tuning should evaluate set-based execution costs and available indexes against actual row counts and buffers before adding indexes.
 
 ## 6. Storage measurements
 
-The uncompressed CSV files occupy approximately **655.2 MB** in total. This is input-file size, **not** PostgreSQL database size. PostgreSQL table, index, WAL, and free-space sizes must be measured after loading and applying `sql/05_indexes.sql`.
+The uncompressed CSV files occupy approximately **655.2 MB** in total. This is input-file size, **not** PostgreSQL database size. PostgreSQL size was measured after loading and applying `sql/05_indexes.sql` and running the partitioning script.
 
 Run the following on both the seed and large databases after `ANALYZE`:
 
@@ -150,14 +148,14 @@ WHERE n.nspname = 'netflix'
 ORDER BY pg_total_relation_size(c.oid) DESC;
 ```
 
-Record the outputs for the seed and large databases here after they are measured:
+The large database was measured after loading the data, applying CP3 indexes, and creating the partitioned copy. Database size includes PostgreSQL catalog and other database overhead. Table and index bytes sum physical relations (`relkind = 'r'`) in the `netflix` schema, including partition children but excluding the partitioned parent to avoid double-counting.
 
 | Dataset | Database size | Table bytes | Index bytes |
 |---|---:|---:|---:|
-| Seed | Pending PostgreSQL measurement | Pending | Pending |
-| Large | Pending PostgreSQL measurement | Pending | Pending |
+| Seed | Not measured in this run | — | — |
+| Large | 3,055,253,183 bytes (2,914 MB) | 1,111,965,696 | 1,933,623,296 |
 
-Do not substitute CSV file size for PostgreSQL storage size.
+The 655.2 MB CSV size is input-file size, not PostgreSQL database size.
 
 ## 7. Architecture for 100× volume
 
@@ -175,7 +173,7 @@ The runnable design is in `sql/08_partitioning.sql`. It creates a separate `view
 
 **Primary-key rule:** a UNIQUE or PRIMARY KEY constraint on a PostgreSQL partitioned table must include every partition-key column. Since the partition key is `started_at`, the partitioned copy uses `PRIMARY KEY (view_id, started_at)`. This guarantees uniqueness of the pair, not global uniqueness of `view_id` alone. The original unpartitioned table's `PRIMARY KEY (view_id)` is unchanged. A production cutover that requires globally unique `view_id` must add a non-partitioned ID registry/sequence-backed allocation strategy and make every insert use it; do not treat the partitioned copy as a drop-in replacement until that is implemented.
 
-**Partition pruning validation:** run the EXPLAIN example at the end of `sql/08_partitioning.sql`. The plan should show only the monthly partition(s) intersecting the requested time range. Save the actual plan in the submission evidence; this report does not claim that PostgreSQL execution was performed in this environment.
+**Partition validation:** `sql/08_partitioning.sql` ran successfully on `netflix_large`. The original and partitioned copies each had 4,012,819 rows; both full-row `EXCEPT ALL` checks returned zero. The June 2026 EXPLAIN scanned only `viewing_activity_p202606` (Execution Time 20.790 ms), confirming month partition pruning. Partition sizes and row counts were also emitted by the script.
 
 ### 7.2 Sharding
 
@@ -218,6 +216,4 @@ Cache only data with an explicit freshness policy. Examples include title catalo
 
 ## 8. Conclusion
 
-The large CSV has been inspected and its exact row counts and time range are documented. The design is prepared for monthly time partitioning, and the SQL keeps the original CP1/CP3 table intact for safe comparison.
-
-**The database cannot yet be declared benchmark-verified for next year's load.** The teammate's large benchmark output, the PostgreSQL storage measurements, and actual partition-pruning execution plan still need to be added. Once those are available, fill the pending cells in §3 and §6, classify measured growth in §4, and document any target misses with before/after plans. A 100× production claim should be made only after those measurements and the global-ID uniqueness decision are resolved.
+The large dataset loaded with all expected rows and zero loader integrity violations. CP3 indexes were applied, all 30 optimized queries were measured three times, and the monthly partitioned copy passed row-equality and partition-pruning checks. The report records fixture substitutions and the W04 target miss. This validates the current CP4 workload at the supplied 20× data scale; it does not establish performance at 100×, and the production design still needs a global `view_id` allocation strategy before replacing the original table.
